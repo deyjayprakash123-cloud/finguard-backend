@@ -38,8 +38,8 @@ def get_db():
 # Mock transaction generator
 def get_mock_transactions(user_id: str):
     now = datetime.utcnow()
-    # Simple mock: if user_id == 'mahesh_critical', or 'jay', or '1', give high risk markers
-    if 'mahesh' in user_id.lower() or 'jay' in user_id.lower() or user_id == '1':
+    # Simple mock: if user_id == 'mahesh_critical', or 'jay', or '1', or '101', give high risk markers
+    if 'mahesh' in user_id.lower() or 'jay' in user_id.lower() or user_id in ['1', '101']:
         return [
             {"type": "credit", "amount": 50000, "narration": "salary transfer", "timestamp": (now - timedelta(days=10)).isoformat()},
             {"type": "debit", "amount": 15000, "narration": "kreditbee emi", "timestamp": (now - timedelta(days=9)).isoformat()},
