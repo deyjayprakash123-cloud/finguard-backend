@@ -54,10 +54,14 @@ def get_mock_transactions(user_id: str):
         {"type": "debit", "amount": 4000, "narration": "zest emi", "timestamp": (now - timedelta(days=2)).isoformat()}
     ]
 
+class ScoreRequest(BaseModel):
+    name: str
+    transactions: list = []
+
 @app.post("/score/{user_id}")
-async def score_user(user_id: str, db: Session = Depends(get_db)):
+async def score_user(user_id: str, request: ScoreRequest, db: Session = Depends(get_db)):
     # 1. Fetch mock transactions
-    transactions = get_mock_transactions(user_id)
+    transactions = get_mock_transactions(user_id) # Using mock directly as requested originally
     
     # 2. Extract Signals
     signals = analyze_transactions(transactions)
@@ -87,8 +91,7 @@ async def score_user(user_id: str, db: Session = Depends(get_db)):
     
     # 4. Trigger Alert if > 66
     if risk_score > 66:
-        user_name = "Mahesh" if "mahesh" in user_id.lower() else user_id
-        send_finguard_alert(user_name, risk_score, triggered_signals[:3])
+        send_finguard_alert(request.name, risk_score, triggered_signals[:3])
         print(f"Telegram Alert triggered for score: {risk_score}")
         
     # 5. Save to database

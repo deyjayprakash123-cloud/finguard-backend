@@ -14,17 +14,7 @@ def send_finguard_alert(user_name: str, score: int, signals: list):
         return False
 
     api_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    
-    # Format list of signals properly
-    signals_str = ", ".join(signals) if signals else "None detected"
-    
-    message = f"""<b>🚨 FIN-GUARD CRITICAL ALERT 🚨</b>
-
-<b>User:</b> {user_name} | <b>Risk Score:</b> {score}/100
-
-<b>Triggered Signals:</b> {signals_str}
-
-<b>Action Required:</b> Urgent intervention recommended."""
+    message = f"""🚨 FinGuard Alert\n{user_name} has reached a high risk score of {score}%!\nUnusual transaction activity detected."""
 
     payload = {
         'chat_id': TELEGRAM_CHAT_ID,
@@ -44,11 +34,9 @@ def send_finguard_alert(user_name: str, score: int, signals: list):
         return False
 
 def _mock_print_alert(user_name, score, signals):
-    signals_str = ", ".join(signals) if signals else "None detected"
     msg = f"""
-🚨 FIN-GUARD CRITICAL ALERT 🚨
-User: {user_name} | Risk Score: {score}/100
-Triggered Signals: {signals_str}
-Action Required: Urgent intervention recommended.
+🚨 FinGuard Alert
+{user_name} has reached a high risk score of {score}%!
+Unusual transaction activity detected.
 """
     print(msg)
